@@ -1,5 +1,6 @@
 from flask import Flask, request
 import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
 
 app = Flask(__name__)
@@ -12,15 +13,25 @@ def message_start(message):
 
 @bot.message_handler(commands=["courses"])
 def message_courses(message):
-    keyboard = telebot.types.InlineKeyboardMarkup(row_windth=1)
+    keyboard = InlineKeyboardMarkup(row_windth=1)
 
     with open("courses.txt") as file:
         courses = [item.split(",") for item in file]
 
         for title, link in courses:
-            url_button = telebot.types.InlineKeyboardButton(text=title.strip(), url=link.strip())
+            url_button = InlineKeyboardButton(text=title.strip(), url=link.strip())
             keyboard.add(url_button)
         bot.send_message(message.chat.id, "List of courses", reply_markup=keyboard)
+        
+@bot.message_handler(commands=["teams"])
+def message_courses(message):
+    keyboard = InlineKeyboardMarkup(row_windth=1)
+    url_button = InlineKeyboardButton(text="Чемпіонат світу", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/table")
+    keyboard.add(url_button)
+    bot.send_message(message.chat.id, "All teams", reply_markup=keyboard)
+        
+        
+
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith("python"))
 def message_start(message):
