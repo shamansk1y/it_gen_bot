@@ -8,15 +8,14 @@ TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
 
-@bot.message_handler(commands=['start'])
-def message_start(message):
-    bot.send_message(message.chat.id, gen_keyboard())
-
-
 def gen_keyboard():
     keyboard = InlineKeyboardMarkup(row_width=1)
     keyboard.add(InlineKeyboardButton("Matchday", url="https://www.flashscore.ua/soccer/world/world-cup/#/2/8/zkyDYRLU/live"), InlineKeyboardButton("Group", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/table"), InlineKeyboardButton("Bombardier", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/top_scorers"), InlineKeyboardButton("Results", url="https://www.flashscore.ua/soccer/world/world-cup/results/"), InlineKeyboardButton("Matches", url="https://www.flashscore.ua/soccer/world/world-cup/fixtures/"))
 
+
+@bot.message_handler(commands=['start'])
+def message_start(message):
+    bot.send_message(message.chat.id, gen_keyboard())
 
 
 
