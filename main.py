@@ -7,23 +7,26 @@ app = Flask(__name__)
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-def gen_markup():
-    markup = InlineKeyboardMarkup()
-    markup.row_width = 2
-    markup.add(InlineKeyboardButton("Yes", callback_data="cb_yes"),
-                            InlineKeyboardButton("No", callback_data="cb_no"))
-    return markup
+@bot.message_handler(commands=['start'])
+def message_start(message):
+    bot.send_message(message.chat.id, 'Hello, user!')
 
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query(call):
-    if call.data == "cb_yes":
-        bot.answer_callback_query(call.id, "Answer is Yes")
-    elif call.data == "cb_no":
-        bot.answer_callback_query(call.id, "Answer is No")
+@bot.message_handler(commands=['courses'])
+def message_courses(message):
+    keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)
 
-@bot.message_handler(func=lambda message: True)
-def message_handler(message):
-    bot.send_message(message.chat.id, "Yes/no?", reply_markup=gen_markup())
+    with open('courses.txt') as file:
+        courses = [item.split(',') for item in file]
+
+        for title, link in courses:
+            url_button = telebot.types.InlineKeyboardButton(text=title.strip(), url=link.strip())
+            keyboard.add(url_button)
+
+        bot.send_message(message.chat.id, 'List of courses', reply_markup=keyboard)
+
+@bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
+def message_text(message):
+    bot.send_message(message.chat.id, 'Python')
 
 @app.route("/" + TOKEN, methods=["POST"])
 def get_message():
