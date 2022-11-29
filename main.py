@@ -23,7 +23,7 @@ def message_courses(message):
         bot.send_message(message.chat.id, "List of courses", reply_markup=keyboard)
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith("python"))
-def message_start(massege):
+def message_start(message):
     bot.send_message(message.chat.id, "Python")
 
 @app.route("/" + TOKEN, methods=["POST"])
