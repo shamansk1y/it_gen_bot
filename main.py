@@ -7,22 +7,22 @@ app = Flask(__name__)
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
+
 @bot.message_handler(commands=['start'])
 def message_start(message):
-    bot.send_message(message.chat.id, 'Hello, user!')
+    bot.send_message(message.chat.id, gen_keyboard())
 
-@bot.message_handler(commands=['courses'])
-def message_courses(message):
-    keyboard = telebot.types.InlineKeyboardMarkup(row_width=1)
 
-    with open('courses.txt') as file:
-        courses = [item.split(',') for item in file]
+def gen_keyboard():
+    keyboard = InlineKeyboardMarkup(row_width=1)
+    keyboard.add(InlineKeyboardButton("Matchday", url="https://www.flashscore.ua/soccer/world/world-cup/#/2/8/zkyDYRLU/live"), InlineKeyboardButton("Group", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/table"), InlineKeyboardButton("Bombardier", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/top_scorers"), InlineKeyboardButton("Results", url="https://www.flashscore.ua/soccer/world/world-cup/results/"), InlineKeyboardButton("Matches", url="https://www.flashscore.ua/soccer/world/world-cup/fixtures/"))
 
-        for title, link in courses:
-            url_button = telebot.types.InlineKeyboardButton(text=title.strip(), url=link.strip())
-            keyboard.add(url_button)
 
-        bot.send_message(message.chat.id, 'List of courses', reply_markup=keyboard)
+
+
+def all_groups():
+    pass
+
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
 def message_text(message):
