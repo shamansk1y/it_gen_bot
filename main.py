@@ -7,35 +7,23 @@ app = Flask(__name__)
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
-@bot.message_handler(commands=["start"])
-def message_start(message):
-    bot.send_message(message.chat.id, "Hello user!")
+def gen_markup():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 2
+    markup.add(InlineKeyboardButton("Yes", callback_data="cb_yes"),
+                            InlineKeyboardButton("No", callback_data="cb_no"))
+    return markup
 
-@bot.message_handler(commands=["courses"])
-def message_courses(message):
-    keyboard = InlineKeyboardMarkup(row_windth=1)
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if call.data == "cb_yes":
+        bot.answer_callback_query(call.id, "Answer is Yes")
+    elif call.data == "cb_no":
+        bot.answer_callback_query(call.id, "Answer is No")
 
-    with open("courses.txt") as file:
-        courses = [item.split(",") for item in file]
-
-        for title, link in courses:
-            url_button = InlineKeyboardButton(text=title.strip(), url=link.strip())
-            keyboard.add(url_button)
-        bot.send_message(message.chat.id, "List of courses", reply_markup=keyboard)
-        
-@bot.message_handler(commands=["teams"])
-def message_courses(message):
-    keyboard = InlineKeyboardMarkup(row_windth=1)
-    url_button = InlineKeyboardButton(text="Чемпіонат світу", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/table")
-    keyboard.add(url_button)
-    bot.send_message(message.chat.id, "All teams", reply_markup=keyboard)
-        
-        
-
-
-@bot.message_handler(func=lambda x: x.text.lower().startswith("python"))
-def message_start(message):
-    bot.send_message(message.chat.id, "Python")
+@bot.message_handler(func=lambda message: True)
+def message_handler(message):
+    bot.send_message(message.chat.id, "Yes/no?", reply_markup=gen_markup())
 
 @app.route("/" + TOKEN, methods=["POST"])
 def get_message():
