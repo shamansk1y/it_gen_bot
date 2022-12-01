@@ -3,14 +3,11 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
 from instagrapi import Client
-
 cl = Client()
 cl.login("rakamakafo_bt", "Itit1225!!")
 app = Flask(__name__)
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
-
-
 @bot.message_handler(commands=['start'])
 def message_start(message):
     bot.send_message(message.chat.id, 'Hello, user!\nI"m instagram bot with test function\nAt this moment i have a command:\n/user_info\n')
@@ -23,21 +20,24 @@ def user_info(message):
 
 
 def user_info_return(message):
-    user_info_by_username = cl.user_info_by_username(message.text)
+    user_info_by_username = cl.user_info_by_username(message)
     fin = user_info_by_username.dict()['biography']
+    bot.send_message(message.chat.id, f"information about an instagram account with username {message.text}:\n{fin}")
+
     bot.send_message(message.chat.id, f"information about an instagram account with username {message.text}")
 
+@bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
+def message_text(message):
+    bot.send_message(message.chat.id, 'Python')
 
 @app.route("/" + TOKEN, methods=["POST"])
 def get_message():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "Python Telegram Bot", 200
-
 @app.route("/")
 def main():
     bot.remove_webhook()
     bot.set_webhook(url="https://it-gen-bot.herokuapp.com/" + TOKEN)
     return "Python Telegram Bot", 200
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
