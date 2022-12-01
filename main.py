@@ -2,10 +2,7 @@ from flask import Flask, request
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import os
-from instagrapi import Client
 
-cl = Client()
-cl.login("rakamakafo_bt", "Itit1225!!")
 app = Flask(__name__)
 TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
@@ -19,12 +16,7 @@ def gen_keyboard(message):
 
 @bot.message_handler(commands=['start'])
 def message_start(message):
-    bot.send_message(message.chat.id, 'Hello, user!\n all command:\n "/go"\n "/user_info"\n')
-
-
-
-def all_groups():
-    pass
+    bot.send_message(message.chat.id, 'Hello, user!')
 
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
