@@ -19,12 +19,17 @@ def gen_keyboard(message):
 
 @bot.message_handler(commands=['start'])
 def message_start(message):
-    bot.send_message(message.chat.id, 'Hello, user!\n all command:\n "/go"\n "/user_info"\n')
+    bot.send_message(message.chat.id, 'Hello, user!\nI"m instagram bot with test function\nAt this moment i have a command:\n/user_info\n')
 
 
+@bot.message_handler(commands=['user_info'])
+def user_info(message):
+    msg = bot.send_message(message.chat.id, 'To get information about an instagram account, enter its username')
+    bot.register_next_step_handler(msg, user_info_return)
 
-def all_groups():
-    pass
+def user_info_return(massege):
+    user_info_by_username = cl.user_info_by_username(massege)
+    bot.send_message(message.chat.id, f"information about an instagram account with username {massege}:\n{user_info_by_username.dict()['biography']}")
 
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
