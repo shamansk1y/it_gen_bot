@@ -11,26 +11,14 @@ TOKEN = os.environ.get("TOKEN")
 bot = telebot.TeleBot(TOKEN)
 
 
-@bot.message_handler(commands=['go'])
-def gen_keyboard(message):
-    keyboard = InlineKeyboardMarkup(row_width=1)
-    keyboard.add(InlineKeyboardButton("Matchday", url="https://www.flashscore.ua/soccer/world/world-cup/#/2/8/zkyDYRLU/live"), InlineKeyboardButton("Group", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/table"), InlineKeyboardButton("Bombardier", url="https://www.flashscore.ua/soccer/world/world-cup/standings/#/2/8/zkyDYRLU/top_scorers"), InlineKeyboardButton("Results", url="https://www.flashscore.ua/soccer/world/world-cup/results/"), InlineKeyboardButton("Matches", url="https://www.flashscore.ua/soccer/world/world-cup/fixtures/"))
-    bot.send_message(message.chat.id, 'World Cup 2022', reply_markup=keyboard)
-
-@bot.message_handler(commands=['start'])
-def message_start(message):
-    bot.send_message(message.chat.id, 'Hello, user!\nI"m instagram bot with test function\nAt this moment i have a command:\n/user_info\n')
+@bot.message_handler(commands=["start","Hello"])
+def start(message):
+    msg = bot.send_message(message.chat.id, 'привет, введи любой текст и отправь')
+    bot.register_next_step_handler(msg, start_2)
 
 
-@bot.message_handler(commands=['user_info'])
-def user_info(message):
-    msg = bot.send_message(message.chat.id, 'To get information about an instagram account, enter its username')
-    bot.register_next_step_handler(msg, user_info_return)
-
-def user_info_return(massege):
-
+def start_2(message):
     bot.send_message(message.chat.id, 'на предыдущем шаге вы ввели\n{}'.format(message.text))
-
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
 def message_text(message):
