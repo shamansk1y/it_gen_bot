@@ -14,11 +14,13 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=["start","Hello"])
 def start(message):
     msg = bot.send_message(message.chat.id, 'привет, введи любой текст и отправь')
-    bot.register_next_step_handler(msg, start_2)
+    bot.register_next_step_handler(msg, user_info_return)
 
 
-def start_2(message):
-    bot.send_message(message.chat.id, f'на предыдущем шаге вы ввели\n{message}')
+def user_info_return(massege):
+    user_info_by_username = cl.user_info_by_username(massege.text)
+    fin = user_info_by_username.dict()['biography']
+    bot.send_message(message.chat.id, f"information about an instagram account with username {massege.text}:\n{fin}")
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
 def message_text(message):
