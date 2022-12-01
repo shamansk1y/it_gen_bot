@@ -28,8 +28,7 @@ def user_info(message):
     bot.register_next_step_handler(msg, user_info_return)
 
 def user_info_return(massege):
-    user_info_by_username = cl.user_info_by_username(massege)
-    bot.send_message(message.chat.id, f"information about an instagram account with username {massege}:\n{user_info_by_username.dict()['biography']}")
+
     bot.send_message(message.chat.id, 'на предыдущем шаге вы ввели\n{}'.format(message.text))
 
 
