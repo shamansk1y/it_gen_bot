@@ -22,9 +22,9 @@ def user_info(message):
     bot.register_next_step_handler(msg, user_info_return)
 
 
-def user_info_return(massege):
+def user_info_return(message):
 
-    bot.send_message(message.chat.id, f"information about an instagram account with username {massege.text}")
+    bot.send_message(message.chat.id, f"information about an instagram account with username {message.text}")
 
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
 def message_text(message):
