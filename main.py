@@ -23,12 +23,10 @@ def user_info(message):
 
 
 def user_info_return(message):
+    user_info_by_username = cl.user_info_by_username(message)
+    fin = user_info_by_username.dict()['biography']
+    bot.send_message(message.chat.id, f"information about an instagram account with username {message.text}:\n{fin}")
 
-    bot.send_message(message.chat.id, f"information about an instagram account with username {message.text}")
-
-@bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
-def message_text(message):
-    bot.send_message(message.chat.id, 'Python')
 
 @app.route("/" + TOKEN, methods=["POST"])
 def get_message():
