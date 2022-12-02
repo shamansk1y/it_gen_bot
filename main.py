@@ -19,7 +19,10 @@ def gen_keyboard(message):
 def message_start(message):
     bot.send_message(message.chat.id, 'Hello, user!')
     
-    
+def test():
+    pass
+
+
 def all_groups():
     pass
 
