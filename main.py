@@ -23,6 +23,9 @@ def test():
     pass
 
 
+def test2():
+    pass
+
 def all_groups():
     pass
 
