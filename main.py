@@ -22,14 +22,6 @@ def message_start(message):
 def test():
     pass
 
-
-def test2():
-    pass
-
-def all_groups():
-    pass
-
-
 @bot.message_handler(func=lambda x: x.text.lower().startswith('python'))
 def message_text(message):
     bot.send_message(message.chat.id, 'Python')
